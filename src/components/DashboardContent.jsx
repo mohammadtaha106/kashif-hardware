@@ -1,13 +1,13 @@
 import React from 'react';
+import Product from '../pages/Product';
 
 const DashboardContent = ({ selectedContent }) => {
 
   const contentMap = {
-    home: <div>Home Content</div>,
-    product: <div>product Content</div>,
-    profile: <div>Profile Content</div>,
-    settings: <div>Settings Content</div>,
-    reports: <div>Reports Content</div>,
+    Products:<Product/> ,
+    analytics: <div>analytics Content</div>,
+    orders: <div>orders Content</div>,
+    users: <div>users Content</div>,
   };
 
   const content = contentMap[selectedContent] || <div>Select a menu item</div>;

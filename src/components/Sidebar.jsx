@@ -1,7 +1,7 @@
 import React from 'react';
 
 const Sidebar = ({ setSelectedContent, selectedContent }) => {
-  const navItems = ['home', 'product', 'profile', 'settings', 'reports'];
+  const navItems = ['Products','analytics', 'orders', 'users'];
 
   return (
     <div className="w-full md:w-1/4 bg-white text-black p-6 shadow-xl border-r border-gray-200">

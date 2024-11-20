@@ -3,9 +3,9 @@ import Sidebar from '../components/Sidebar';
 import DashboardContent from '../components/DashboardContent';
 
 function Dashboard() {
-    const [selectedContent, setSelectedContent] = useState('home');
+    const [selectedContent, setSelectedContent] = useState('Products');
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen mt-16">
  
       <Sidebar setSelectedContent={setSelectedContent} />
     

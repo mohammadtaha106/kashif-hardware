@@ -1,21 +1,20 @@
-
-import { useForm } from "react-hook-form";
 import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
   Button,
   Input,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
   Textarea,
   useDisclosure,
 } from "@nextui-org/react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { cloudinaryUrl, db } from "../../utils/firebase";
+import { addDoc, collection } from "firebase/firestore";
 
 export default function ProductModal() {
-
-
-
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const {
     register,
@@ -24,10 +23,39 @@ export default function ProductModal() {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data, e) => {
+  const onSubmit = async (data, e) => {
     if (Object.keys(errors).length === 0) {
       console.log(data);
-      alert("Product Added Successfully!");
+      const file = data.image[0];
+      console.log(file);
+
+      const formData = new FormData();
+
+      formData.append("file", file);
+      formData.append("upload_preset", "default-preset");
+
+      const response = await fetch(cloudinaryUrl, {
+        method: "POST",
+        body: formData,
+      });
+
+      const imageUploadResult = await response.json();
+
+      const imageUrl = imageUploadResult.url;
+
+      const docref = await addDoc(collection(db, "products"), {
+        ...data,
+        image: imageUrl,
+      });
+      console.log('docref=>', docref);
+
+      toast.success("Product Added Successfully!");
+
+      // const imageRef = ref(storage, `images/${file.name}`);
+      // uploadBytes(imageRef, file).then((snapshot) => {
+      //   getDownloadURL(imageRef).then((url) => console.log(url));
+      // });
+
       reset();
       onOpenChange(false); // Close modal on successful submission
     }
@@ -46,7 +74,7 @@ export default function ProductModal() {
               <ModalBody>
                 <form
                   id="product-form"
-                  onSubmit={handleSubmit(onSubmit)} 
+                  onSubmit={handleSubmit(onSubmit)}
                   className="space-y-6"
                 >
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -63,7 +91,7 @@ export default function ProductModal() {
                         {...register("title", {
                           required: "Title is required",
                         })}
-                        isInvalid={!!errors.title} 
+                        isInvalid={!!errors.title}
                         aria-describedby="title-error"
                         fullWidth
                       />
@@ -86,12 +114,15 @@ export default function ProductModal() {
                         {...register("category", {
                           required: "Category is required",
                         })}
-                        isInvalid={!!errors.category} 
+                        isInvalid={!!errors.category}
                         aria-describedby="category-error"
                         fullWidth
                       />
                       {errors.category && (
-                        <div id="category-error" className="text-red-600 text-sm">
+                        <div
+                          id="category-error"
+                          className="text-red-600 text-sm"
+                        >
                           {errors.category.message}
                         </div>
                       )}
@@ -117,7 +148,7 @@ export default function ProductModal() {
                             message: "Price must be greater than 0",
                           },
                         })}
-                        isInvalid={!!errors.price} 
+                        isInvalid={!!errors.price}
                         aria-describedby="price-error"
                         fullWidth
                       />
@@ -140,7 +171,7 @@ export default function ProductModal() {
                         {...register("brand", {
                           required: "Brand is required",
                         })}
-                        isInvalid={!!errors.brand} 
+                        isInvalid={!!errors.brand}
                         aria-describedby="brand-error"
                         fullWidth
                       />
@@ -162,10 +193,11 @@ export default function ProductModal() {
                     <Input
                       id="image"
                       type="file"
+                      accept=".jpg,.png,.jpeg"
                       {...register("image", {
                         required: "Image is required",
                       })}
-                      isInvalid={!!errors.image} 
+                      isInvalid={!!errors.image}
                       aria-describedby="image-error"
                       fullWidth
                     />
@@ -189,12 +221,15 @@ export default function ProductModal() {
                       {...register("description", {
                         required: "Description is required",
                       })}
-                      isInvalid={!!errors.description} 
+                      isInvalid={!!errors.description}
                       aria-describedby="description-error"
                       fullWidth
                     />
                     {errors.description && (
-                      <div id="description-error" className="text-red-600 text-sm">
+                      <div
+                        id="description-error"
+                        className="text-red-600 text-sm"
+                      >
                         {errors.description.message}
                       </div>
                     )}
@@ -205,11 +240,7 @@ export default function ProductModal() {
                 <Button color="danger" variant="light" onPress={onClose}>
                   Close
                 </Button>
-                <Button
-                  color="primary"
-                  type="submit"
-                  form="product-form"
-                >
+                <Button color="primary" type="submit" form="product-form">
                   Add
                 </Button>
               </ModalFooter>

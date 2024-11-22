@@ -1,7 +1,7 @@
-import React from 'react';
+import React from "react";
 
 const Sidebar = ({ setSelectedContent, selectedContent }) => {
-  const navItems = ['Products','analytics', 'orders', 'users'];
+  const navItems = ["Products", "analytics", "orders", "users"];
 
   return (
     <div className="w-full md:w-1/4 bg-white text-black p-6 shadow-xl border-r border-gray-200">
@@ -11,9 +11,10 @@ const Sidebar = ({ setSelectedContent, selectedContent }) => {
           <li
             key={item}
             className={`cursor-pointer px-6 py-3 rounded-md text-base transition-all duration-300
-            ${item === selectedContent
-              ? 'bg-black text-white shadow-md'
-              : 'hover:bg-gray-100 hover:text-black focus:ring-2 focus:ring-black focus:outline-none'
+            ${
+              item === selectedContent
+                ? "bg-black text-white shadow-md"
+                : "hover:bg-gray-100 hover:text-black focus:ring-2 focus:ring-black focus:outline-none"
             }`}
             onClick={() => setSelectedContent(item)}
           >

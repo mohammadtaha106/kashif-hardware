@@ -55,14 +55,14 @@ export default function ProductDeleteModal({ productId }) {
                   color="danger" 
                   variant="light" 
                   onPress={onClose}
-                  disabled={isLoading} // Disable the Cancel button when loading
+                  disabled={isLoading} 
                 >
                   Cancel
                 </Button>
                 <Button 
                   onPress={handleDelete} 
                   color="danger"
-                  isLoading={isLoading} // Show loading state on the Delete button
+                  isLoading={isLoading}
                 >
                   Delete
                 </Button>

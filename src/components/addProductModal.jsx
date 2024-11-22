@@ -20,7 +20,8 @@ export default function ProductModal() {
     register,
     handleSubmit,
     reset,
-    formState: { errors },
+    
+    formState: { errors , isLoading},
   } = useForm();
 
   const onSubmit = async (data, e) => {
@@ -57,13 +58,13 @@ export default function ProductModal() {
       // });
 
       reset();
-      onOpenChange(false); // Close modal on successful submission
+      onOpenChange(false); 
     }
   };
 
   return (
     <>
-      <Button onPress={onOpen}>Add Product</Button>
+      <Button className="w-1/4 p-5" onPress={onOpen}>Add Product</Button>
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent className="sm:max-w-md w-full mx-auto p-6">
           {(onClose) => (
@@ -240,7 +241,7 @@ export default function ProductModal() {
                 <Button color="danger" variant="light" onPress={onClose}>
                   Close
                 </Button>
-                <Button color="primary" type="submit" form="product-form">
+                <Button disabled={isLoading}  color="primary" type="submit" form="product-form">
                   Add
                 </Button>
               </ModalFooter>

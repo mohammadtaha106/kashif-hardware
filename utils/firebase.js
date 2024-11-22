@@ -7,6 +7,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   GoogleAuthProvider,
+   
 } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
@@ -38,4 +39,7 @@ export {
   db,
   cloudinaryCloudName,
   cloudinaryUrl,
+  signInWithEmailAndPassword,
+  GoogleAuthProvider,
+   
 };

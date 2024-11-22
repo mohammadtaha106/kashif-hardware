@@ -34,7 +34,7 @@ function ProductList({products}) {
           <div className="flex flex-col justify-center items-center bg-[#f4f5f7] h-1/2 p-2">
             <h2 className="text-lg text-blue-800 font-extrabold">{product.title}</h2>
             <p className="text-gray-500"> {product.category}</p>
-            <p className="text-lg text-blue-800 font-extrabold">${product.price}</p>
+            <p className="text-lg text-blue-800 font-extrabold">PKR {product.price}.00</p>
           </div>
         </div>
       ))}

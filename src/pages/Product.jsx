@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 
 import { db } from "../../utils/firebase";
 import { collection, getDocs } from "firebase/firestore";
-import ProductsTable from "../components/productsTable";
-import ProductModal from "../components/addProductModal";
+import ProductsTable from "../components/ProductsTable";
+
+
 
 
 function Product() {
@@ -29,7 +30,6 @@ function Product() {
     <>
       <div className="flex justify-between">
 
-        <ProductModal/>
        
          
          

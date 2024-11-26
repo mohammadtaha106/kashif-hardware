@@ -7,7 +7,7 @@ function Dashboard() {
   return (
     <div className="flex h-screen mt-16">
  
-      <Sidebar setSelectedContent={setSelectedContent} />
+      <Sidebar className="h-screen" setSelectedContent={setSelectedContent} />
     
       <DashboardContent selectedContent={selectedContent} />
     </div>

@@ -40,7 +40,7 @@ function AuthContextProvider({children}){
       {
           loading ? (
               <div className="flex justify-center items-center w-full h-screen">
-              <Spinner color="secondary" size="lg" />
+              <Spinner color="primary" size="lg" />
             </div>
             
           ):(

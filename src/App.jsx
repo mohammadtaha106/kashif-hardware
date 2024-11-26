@@ -10,6 +10,7 @@ import Header from './components/Header'
 import Home from './pages/Home'
 import SignIn from './pages/SignIn'
 import SignUp from './pages/SignUp'
+import Shop from './pages/Shop'
 
 function App() {
  
@@ -21,6 +22,7 @@ function App() {
 
         <Routes>
           <Route path="/dashboard" element={<Dashboard/>}/>
+          <Route path="/shop" element={<Shop/>}/>
           <Route path="/products" element={<Product/>}/>
           <Route path="/" element={<Home/>}/>
           <Route path="/signin" element={<SignIn/>}/>

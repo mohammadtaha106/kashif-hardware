@@ -5,6 +5,7 @@ import { collection, getDocs } from "firebase/firestore";
 import Container from '../components/Container';
 import ProductList from "../components/ProductList";
 import { Spinner } from "@nextui-org/react";
+import Footer from "../components/Footer";
 
 function Home() {
   const [product, setProduct] = useState([]);
@@ -37,6 +38,8 @@ function Home() {
         <>
           <Container />
           <ProductList products={product} />
+
+          <Footer/>
         </>
       )}
     </>

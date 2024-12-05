@@ -20,8 +20,8 @@ export default function ProductModal() {
     register,
     handleSubmit,
     reset,
-    
-    formState: { errors , isLoading},
+
+    formState: { errors, isSubmitting },
   } = useForm();
 
   const onSubmit = async (data, e) => {
@@ -48,7 +48,7 @@ export default function ProductModal() {
         ...data,
         image: imageUrl,
       });
-      console.log('docref=>', docref);
+      console.log("docref=>", docref);
 
       toast.success("Product Added Successfully!");
 
@@ -58,13 +58,15 @@ export default function ProductModal() {
       // });
 
       reset();
-      onOpenChange(false); 
+      onOpenChange(false);
     }
   };
 
   return (
     <>
-      <Button className="w-1/4 p-5" onPress={onOpen}>Add Product</Button>
+      <Button className="w-1/4 p-5" onPress={onOpen}>
+        Add Product
+      </Button>
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent className="sm:max-w-md w-full mx-auto p-6">
           {(onClose) => (
@@ -241,7 +243,13 @@ export default function ProductModal() {
                 <Button color="danger" variant="light" onPress={onClose}>
                   Close
                 </Button>
-                <Button disabled={isLoading}  color="primary" type="submit" form="product-form">
+                <Button
+                  isLoading={isSubmitting}
+                  
+                  color="primary"
+                  type="submit"
+                  form="product-form"
+                >
                   Add
                 </Button>
               </ModalFooter>

@@ -1,45 +1,39 @@
 import React, { useContext, useEffect, useState } from "react";
-import shopBgPic from "../assets/bg2.webp";
+import shopBgPic from "../assets/shopbg.png";
 import filter from "../assets/filter.png";
 import Footer from "../components/Footer";
 import { Link } from "react-router-dom";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../utils/firebase";
 import { CartContext } from "../context/CartContext";
+import { Spinner } from "@nextui-org/react";
 
 function Shop() {
-    const [product, setProduct] = useState([]);
-  const [loading, setLoading] = useState(true); 
+  const [product, setProduct] = useState([]);
+  const [loading, setLoading] = useState(true); // Loading state
+  const [selectedCategory, setselectedCategory] = useState("All");
+  
   const productCollectionRef = collection(db, "products");
 
   useEffect(() => {
     const getProducts = async () => {
       try {
-        setLoading(true); 
+        setLoading(true); // Start loading
         const data = await getDocs(productCollectionRef);
         setProduct(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
       } catch (error) {
         console.error("Error fetching products:", error);
       } finally {
-        setLoading(false); 
+        setLoading(false); // Stop loading
       }
     };
 
     getProducts();
   }, []);
 
-  console.log("product", product);
-  
-
-  const [selectedCategory, setselectedCategory] = useState("All");
-
-  const categories = product.map(item => item.category)
-  console.log('categories', categories);
-  
-  const allCategories = ["All", ...categories]
-
-  console.log('allCategories', allCategories);
-  
+  const categories = product.map(item => item.category);
+  const cat = [...new Set(categories)];
+  const allCategories = ["All", ...cat];
 
   const handleOnCategory = (e) => {
     setselectedCategory(e.target.value);
@@ -50,20 +44,21 @@ function Shop() {
       ? product
       : product.filter((item) => item.category === selectedCategory);
 
-const {  isItemAdded, addItemsToCart}= useContext(CartContext)
-  
+  const { isItemAdded, addItemsToCart } = useContext(CartContext);
+
   return (
     <>
       <div className="relative w-full h-[80vh]">
         <img src={shopBgPic} alt="" className="w-full h-full object-cover" />
-        <div className="absolute inset-0 flex flex-col justify-center items-center text-black">
+        <div className="absolute inset-0 flex flex-col justify-center items-center text-gray-200">
           <h1 className="text-4xl font-bold">Shop</h1>
           <nav className="flex mt-4" aria-label="Breadcrumb">
+            {/* Breadcrumb */}
             <ol className="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
               <li className="inline-flex items-center">
                 <a
                   href="#"
-                  className="inline-flex items-center text-lg font-extrabold text-gray-700 dark:text-gray-400"
+                  className="inline-flex items-center text-lg font-extrabold text-gray-800 dark:text-gray-400"
                 >
                   Home
                 </a>
@@ -71,7 +66,7 @@ const {  isItemAdded, addItemsToCart}= useContext(CartContext)
               <li>
                 <div className="flex items-center">
                   <svg
-                    className="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1"
+                    className="rtl:rotate-180 w-3 h-3 text-gray-700 mx-1"
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -87,7 +82,7 @@ const {  isItemAdded, addItemsToCart}= useContext(CartContext)
                   </svg>
                   <a
                     href="#"
-                    className="ms-1 text-lg font-extralight text-gray-700 md:ms-2 dark:text-gray-400"
+                    className="ms-1 text-lg font-extralight text-gray-800 md:ms-2 dark:text-gray-400"
                   >
                     Shop
                   </a>
@@ -98,20 +93,22 @@ const {  isItemAdded, addItemsToCart}= useContext(CartContext)
         </div>
       </div>
 
-      <div className="flex justify-between items-center bg-[#fbf1e7] py-12 px-8">
-        <div className="flex gap-4 items-center">
-          <img src={filter} alt="" className="w-5 h-5" />
-          <h1 className="text-xl">Filter</h1>
-          <h1 className="text-xl">|</h1>
-          <h1 className="text-xl">Showing 1-30 of 30 results</h1>
+      {/* Filter Section */}
+      <div className="flex flex-wrap justify-between items-center bg-gray-200 py-6 px-4 md:py-12 md:px-8 gap-4">
+        <div className="flex items-center gap-2">
+          <img src={filter} alt="Filter Icon" className="w-4 h-4 md:w-5 md:h-5" />
+          <h1 className="text-sm md:text-xl">Filter</h1>
+          <span className="hidden md:inline text-sm md:text-xl">|</span>
+          <h1 className="text-xs md:text-xl">
+            Showing {filteredProducts.length} of {product.length} results
+          </h1>
         </div>
-
-        <div className="flex items-center gap-3">
-          <h1 className="text-xl">Sort By:</h1>
+        <div className="flex items-center gap-2">
+          <h1 className="text-xs md:text-xl">Sort By:</h1>
           <select
             value={selectedCategory}
             onChange={handleOnCategory}
-            className="p-2 rounded w-48"
+            className="p-2 text-xs md:text-base rounded w-32 md:w-48"
           >
             {allCategories.map((category) => (
               <option value={category} key={category}>
@@ -122,51 +119,48 @@ const {  isItemAdded, addItemsToCart}= useContext(CartContext)
         </div>
       </div>
 
-      <h1 className="text-3xl text-center font-extrabold mt-20 mb-8">
-        Our Products
-      </h1>
-      <div className="flex flex-wrap justify-center mt-6 mb-6">
-  {filteredProducts.map((item) => (
-    <div className="flex flex-col items-center m-4 w-72 h-auto relative group">
-      <Link to={`/shop/${item.id}`} className="flex flex-col items-center w-full h-full">
-        <div className="flex flex-col w-full h-full border rounded shadow overflow-hidden">
-          <div className="w-full h-1/2 relative">
-            <img
-              src={item.image}
-              alt={item.title}
-              className="w-full h-full object-cover transition-all duration-300 group-hover:blur-sm"
-            />
-            <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-              <Link to={`/shop/${item.id}`}>
-                <button className="text-white font-bold py-2 px-4 border border-white rounded">
-                  View Product
-                </button>
-              </Link>
-            </div>
-          </div>
-
-          <div className="flex flex-col justify-center items-center bg-[#f4f5f7] h-1/2 p-2">
-            <h2 className="text-lg text-[#3a3a3a] font-extrabold">
-              {item.title}
-            </h2>
-            <p className="text-[#8e758b]">{item.category}</p>
-            <p className="text-lg text-[#3a3a3a] font-extrabold">
-              ${item.price}
-            </p>
-          </div>
+      {/* Loading Spinner */}
+      <h1 className="text-3xl text-center font-extrabold mt-20 mb-8 text-blue-800">
+            Our Products
+          </h1>
+      {loading ? (
+        <div className="flex justify-center items-center mt-10">
+          <Spinner/>
         </div>
-      </Link>
-
-      <button
-        onClick={() => addItemsToCart(item)}
-        className="w-full bg-white text-[#c28c2b] font-bold py-2 mt-2 border border-gray-300"
-      >
-        {isItemAdded(item.id) ? `Added to Cart (${isItemAdded(item.id).quantity})` : `Add to Cart`}
-      </button>
-    </div>
-  ))}
-</div>
-
+      ) : (
+        <>
+         
+          <div className="flex flex-wrap justify-center mt-6 mb-6 gap-6">
+            {filteredProducts.map((item) => (
+              <div
+                className="flex flex-col items-center w-full xs:w-64 sm:w-72 md:w-64 lg:w-72 h-auto relative group border shadow-md hover:shadow-lg transition-shadow duration-300"
+                key={item.id}
+              >
+                {/* Product Card */}
+                <div className="w-full h-48 relative overflow-hidden">
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                    <Link to={`/shop/${item.id}`}>
+                      <button className="text-white font-bold py-2 px-4 border border-white bg-black/40 hover:bg-black/70 transition-all duration-300">
+                        View Product
+                      </button>
+                    </Link>
+                  </div>
+                </div>
+                <div className="flex flex-col justify-center items-center bg-[#f4f5f7] p-4 w-full">
+                  <h2 className="text-lg text-blue-800 font-extrabold">{item.title}</h2>
+                  <p className="text-sm text-[#8e758b]">{item.category}</p>
+                  <p className="text-lg text-[#3a3a3a] font-extrabold">{item.price} PKR</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
 
       <Footer />
     </>

@@ -93,7 +93,7 @@ const Header = () => {
         </Link>
       )}
       <Link
-        to="/dashboard"
+        to="/admin"
         className="text-xs sm:text-sm md:w-36 p-2 h-10 bg-blue-800 text-white border border-blue-800 flex items-center justify-center rounded-md"
       >
         Admin Panel

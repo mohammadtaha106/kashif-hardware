@@ -13,6 +13,7 @@ import Shop from "./pages/Shop";
 import AdminHeader from "./components/AdminHeader";
 import ProductDetails from "./pages/ProductDetail";
 import Cart from "./pages/Cart";
+import Checkout from "./pages/Checkout";
 
 function App() {
   return (
@@ -27,6 +28,8 @@ function App() {
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/checkout" element={<Checkout />} />
+
         </Route>
 
         <Route path="/admin" element={<AdminLayout />}>
@@ -43,6 +46,8 @@ const AdminLayout = () => {
   return (
     <>
       <AdminHeader />
+
+      <h1>hello </h1>
       <Outlet />
     </>
   );

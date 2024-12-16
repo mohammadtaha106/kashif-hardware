@@ -1,9 +1,12 @@
+import { Button, Card, CardBody, CardHeader, Image } from "@nextui-org/react";
 import React from "react";
-import { Card, CardHeader, CardBody, Image, Button } from "@nextui-org/react";
 import { Link } from "react-router-dom";
+import useProducts from "../hooks/useProducts";
 
-function ProductList({ products }) {
+function ProductList() {
+  const { data: products } = useProducts();
   const combinedDataset = products;
+  console.log("combinedDataset", combinedDataset);
 
   const shuffledArray = (array) => {
     for (let i = array.length - 1; i > 0; i--) {
@@ -15,6 +18,8 @@ function ProductList({ products }) {
 
   const getRandomProducts = (dataset, count) => {
     const shuffled = shuffledArray(dataset);
+    console.log("shuffled", shuffled);
+
     return shuffled.slice(0, count);
   };
 

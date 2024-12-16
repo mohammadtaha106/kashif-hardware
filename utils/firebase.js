@@ -7,9 +7,8 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   GoogleAuthProvider,
-   
 } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { collection, getFirestore } from "firebase/firestore";
 
 import { getStorage } from "firebase/storage";
 
@@ -29,6 +28,7 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const cloudinaryCloudName = "dhbzlcwbf";
 const cloudinaryUrl = `https://api.cloudinary.com/v1_1/${cloudinaryCloudName}/image/upload`;
+const productsCollectionRef = collection(db, "products");
 
 export {
   auth,
@@ -41,5 +41,5 @@ export {
   cloudinaryUrl,
   signInWithEmailAndPassword,
   GoogleAuthProvider,
-   
+  productsCollectionRef,
 };

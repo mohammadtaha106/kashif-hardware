@@ -1,28 +1,31 @@
 import {
-  Table,
-  TableHeader,
-  TableColumn,
-  TableBody,
-  TableRow,
-  TableCell,
+  Button,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
   Input,
   Spinner,
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
 } from "@nextui-org/react";
-import ProductDeleteModal from "./ProductDeleteModal";
-import React, { useState, useMemo, useEffect } from "react";
-import {
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownItem,
-  Button,
-} from "@nextui-org/react";
+import React, { useEffect, useMemo, useState } from "react";
 import ProductModal from "./addProductModal";
+import ProductDeleteModal from "./ProductDeleteModal";
+import useProducts from "../hooks/useProducts";
 
-export default function ProductsTable({ products }) {
+export default function ProductsTable() {
+  const { data: products } = useProducts();
+
+  console.log("products==>", products);
+
   const [loading, setLoading] = useState(true); // Set loading to true initially
-  const [search, setSearch] = useState('');
-  const [selectedKeys, setSelectedKeys] = useState(new Set(["All"])); 
+  const [search, setSearch] = useState("");
+  const [selectedKeys, setSelectedKeys] = useState(new Set(["All"]));
   const categories = Array.from(new Set(products.map((p) => p.category)));
   const selectedValue = useMemo(
     () => Array.from(selectedKeys).join(", "),
@@ -32,7 +35,9 @@ export default function ProductsTable({ products }) {
   const filteredProducts = useMemo(() => {
     let filtered = products;
     if (selectedValue !== "All") {
-      filtered = filtered.filter((product) => product.category === selectedValue);
+      filtered = filtered.filter(
+        (product) => product.category === selectedValue
+      );
     }
 
     if (search.trim() !== "") {
@@ -42,19 +47,18 @@ export default function ProductsTable({ products }) {
           product.title.toLowerCase().includes(searchLower) ||
           product.category.toLowerCase().includes(searchLower) ||
           product.price.toString().includes(searchLower) ||
-          product.brand.toLowerCase().includes(searchLower) 
+          product.brand.toLowerCase().includes(searchLower)
         );
       });
     }
     return filtered;
   }, [selectedValue, products, search]);
 
-  
   useEffect(() => {
     if (products && products.length > 0) {
       setLoading(false);
     } else {
-      setLoading(true); 
+      setLoading(true);
     }
   }, [products]);
 
@@ -69,7 +73,12 @@ export default function ProductsTable({ products }) {
 
         <div className="w-full flex gap-4 items-center justify-between">
           <div className="flex flex-1 gap-4 items-center">
-            <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="search anything" className="w-3/4" />
+            <Input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="search anything"
+              className="w-3/4"
+            />
             <ProductModal />
           </div>
 
@@ -130,57 +139,55 @@ export default function ProductsTable({ products }) {
 
         {filteredProducts.length === 0 ? (
           <h1 className="text-center text-red-500 mt-10">No Product Found.</h1>
+        ) : loading ? (
+          <div className="flex justify-center items-center my-16">
+            <Spinner size="lg" />
+          </div>
         ) : (
-          loading ? (
-            <div className="flex justify-center items-center my-16">
-              <Spinner size="lg" />
-            </div>
-          ) : (
-            <Table aria-label="Products Table" className="mt-6">
-              <TableHeader>
-                <TableColumn>ID</TableColumn>
-                <TableColumn>TITLE</TableColumn>
-                <TableColumn>CATEGORY</TableColumn>
-                <TableColumn>PRICE</TableColumn>
-                <TableColumn>BRAND NAME</TableColumn>
-                <TableColumn>ACTIONS</TableColumn>
-              </TableHeader>
-              <TableBody>
-                {filteredProducts.map((product) => (
-                  <TableRow key={product.id}>
-                    <TableCell>{product.id}</TableCell>
-                    <TableCell>
-                      <div
+          <Table aria-label="Products Table" className="mt-6">
+            <TableHeader>
+              <TableColumn>ID</TableColumn>
+              <TableColumn>TITLE</TableColumn>
+              <TableColumn>CATEGORY</TableColumn>
+              <TableColumn>PRICE</TableColumn>
+              <TableColumn>BRAND NAME</TableColumn>
+              <TableColumn>ACTIONS</TableColumn>
+            </TableHeader>
+            <TableBody>
+              {filteredProducts.map((product) => (
+                <TableRow key={product.id}>
+                  <TableCell>{product.id}</TableCell>
+                  <TableCell>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "10px",
+                      }}
+                    >
+                      <img
+                        src={product.image}
+                        alt={product.title}
                         style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "10px",
+                          width: "40px",
+                          height: "40px",
+                          borderRadius: "4px",
+                          objectFit: "cover",
                         }}
-                      >
-                        <img
-                          src={product.image}
-                          alt={product.title}
-                          style={{
-                            width: "40px",
-                            height: "40px",
-                            borderRadius: "4px",
-                            objectFit: "cover",
-                          }}
-                        />
-                        {product.title}
-                      </div>
-                    </TableCell>
-                    <TableCell>{product.category}</TableCell>
-                    <TableCell>PKR {product.price}.00</TableCell>
-                    <TableCell>{product.brand}</TableCell>
-                    <TableCell>
-                      <ProductDeleteModal productId={product.id} />
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          )
+                      />
+                      {product.title}
+                    </div>
+                  </TableCell>
+                  <TableCell>{product.category}</TableCell>
+                  <TableCell>PKR {product.price}.00</TableCell>
+                  <TableCell>{product.brand}</TableCell>
+                  <TableCell>
+                    <ProductDeleteModal productId={product.id} />
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         )}
       </div>
     </div>
